@@ -1,7 +1,7 @@
 # ATM-Application
 
 The Atm application allows users to check the bank account balance, account details and request a withdrawal. 
-The application also allows the bank to check ATM transactions for bank purposes.
+The application also allows the bank to check ATM transactions for banking purposes.
 
 ### Atm application was made using:
 
@@ -9,6 +9,27 @@ The application also allows the bank to check ATM transactions for bank purposes
 * Java 11
 * maven
 * Docker
+
+## How to build
+
+`mvn clean install`
+
+## Running
+
+`mvn spring-boot:run`
+
+### Building docker container
+
+`mvn clean install spring-boot:build-image -Dspring-boot.build-image.imageName=zinkworks/atm-application`
+
+### Running with Docker
+
+`docker run -d -it --rm -p 8080:8080 --name atm docker.io/zinkworks/atm-application:latest`
+
+## Test coverage
+
+`open target/site/jacoco/index.html`
+
 
 
 ### Endpoints
@@ -134,22 +155,3 @@ Response:
     "balance": 1000.0
 }
 ```
-## How to build
-
-`mvn clean install`
-
-## Running
-
-`mvn spring-boot:run`
-
-### Building docker container
-
-`mvn clean install spring-boot:build-image -Dspring-boot.build-image.imageName=zinkworks/atm-application`
-
-### Running with Docker
-
-`docker run -d -it --rm -p 8080:8080 --name atm docker.io/zinkworks/atm-application:latest`
-
-## Test coverage
-
-`open target/site/jacoco/index.html`
