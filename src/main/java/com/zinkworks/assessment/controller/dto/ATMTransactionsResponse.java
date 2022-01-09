@@ -1,8 +1,9 @@
 package com.zinkworks.assessment.controller.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -13,13 +14,12 @@ import com.zinkworks.assessment.model.Atm;
 public class ATMTransactionsResponse {
   private List<ATMOperation> statements;
   private Map<Integer, Integer> notesAvailable;
-  private Date date;
+  private LocalDateTime date = LocalDateTime.now();
   private BigDecimal balance;
   
   public ATMTransactionsResponse(Atm atm) {
     this.statements = atm.getOperations();
     this.notesAvailable = atm.getNotesAvailable();
-    this.date = new Date();
     this.balance = atm.getBalance();
   }
 
@@ -33,8 +33,9 @@ public class ATMTransactionsResponse {
     return copy;
   }
 
-  public Date getDate() {
-    return date;
+  public String getDate() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    return date.format(formatter);
   }
 
   public BigDecimal getBalance() {

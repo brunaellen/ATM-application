@@ -1,19 +1,19 @@
 package com.zinkworks.assessment.controller.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class BankAccountWithdrawResponse {
   private Map<Integer, Integer> notes;
-  private Date date;
+  private LocalDateTime date = LocalDateTime.now();
   private Long accountNumber;
   private BigDecimal balance;
   
   public BankAccountWithdrawResponse(Long accountNumber, Map<Integer, Integer> notes, BigDecimal balance) {
     this.notes = notes;
     this.accountNumber = accountNumber;
-    this.date = new Date();
     this.balance = balance;
   }
   
@@ -25,8 +25,9 @@ public class BankAccountWithdrawResponse {
     return notes;
   }
   
-  public Date getDate() {
-    return date;
+  public String getDate() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    return date.format(formatter);
   }
   
   public Long getAccountNumber() {
