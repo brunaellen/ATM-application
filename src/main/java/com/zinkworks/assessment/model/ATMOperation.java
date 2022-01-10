@@ -28,10 +28,14 @@ public class ATMOperation {
   
   @Enumerated(EnumType.STRING)
   private OperationType type;
+  
+  public ATMOperation() {
+  }
 
-  public ATMOperation(OperationType type, BigDecimal amount) {
+  public ATMOperation(OperationType type, BigDecimal amount,Atm atm) {
     this.type = type;
     this.amount = amount;
+    this.atm = atm;
   }
   
   public BigDecimal getAmount() {
@@ -45,5 +49,9 @@ public class ATMOperation {
   public String getDate() {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     return date.format(formatter);
+  }
+
+  public Long getId() {
+    return id;
   }
 }

@@ -26,11 +26,15 @@ public class BankAccountOperation {
   @ManyToOne
   private BankAccount bankAccount;
   
+  public BankAccountOperation() {
+  }
+  
 
-  public BankAccountOperation(OperationType type, BigDecimal amount) {
+  public BankAccountOperation(OperationType type, BigDecimal amount, BankAccount bankAccount) {
     this.type = type;
     this.amount = amount;
     this.date = new Date();
+    this.bankAccount = bankAccount;
   }
   
   public BigDecimal getAmount() {

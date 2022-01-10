@@ -31,17 +31,4 @@ class AtmTest {
     notesAvailable.put(50, 10);
     assertThat(atm.getNotesAvailable()).isEqualTo(notesAvailable);
   }
-  
-  @Test
-  void subtract_givenAmountAndSummaryOfNotes_shouldReturnTrueIfWithdrawOccurred() {
-    Map<Integer, Integer> summaryOfNotes = new TreeMap<>(Comparator.reverseOrder());
-    summaryOfNotes.put(5, 0);
-    summaryOfNotes.put(10, 0);
-    summaryOfNotes.put(20, 0);
-    summaryOfNotes.put(50, 0);
-
-    assertThat(atm.subtract(BigDecimal.valueOf(50D), summaryOfNotes)).isTrue();
-    BigDecimal withdrawOperation = atm.getOperations().get(0).getAmount();
-    assertThat(withdrawOperation).isEqualTo(BigDecimal.valueOf(50D));
-  }
 }

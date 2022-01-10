@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.zinkworks.assessment.model.BankAccount;
 import com.zinkworks.assessment.service.exception.InsufficientBankAccountFundsException;
@@ -19,25 +20,28 @@ public class WithdrawTransactionService {
   @Autowired
   private ATMService atmService;
 
-  public Map<Integer, Integer> withdraw(Long accountNumber, Integer pin, BigDecimal amount) {
+  @Transactional
+  public Map<Integer, Integer> withdraw(Long accountNumber, Integer pin, BigDecimal amount, Long id) {
+    
     if (amount.compareTo(BigDecimal.ZERO) <= 0) {
       throw new InvalidAmountException("Amount should be greater than zero");
     }
     
     BankAccount account = bankAccountService.getBankAccount(accountNumber, pin);
-    if(!account.hasEnoughFunds(amount)) {
+    
+    if(!bankAccountService.accountHasEnoughFunds(amount, account)) {
       throw new InsufficientBankAccountFundsException();
     }
     
-    if(!atmService.hasEnoughFunds(amount)) {
+    if(!atmService.hasEnoughFunds(amount, id)) {
       throw new InvalidAmountException("There is not enough money to process the withdraw.");
     }
     
-    if(!atmService.canProcessWithdraw(amount)) {
+    if(!atmService.canProcessWithdraw(amount, id)) {
       throw new InvalidAmountException("There is no combination of notes to process the withdraw.");
     }
     
     bankAccountService.withdraw(account, amount);
-    return atmService.withdraw(amount);
+    return atmService.withdraw(amount, id);
   }
 }

@@ -20,7 +20,8 @@ public class ATMController {
   @GetMapping("/transactions")
   @ResponseBody
   public ATMTransactionsResponse getATMTransactions() {
-    Atm atm = atmService.getAtm();
+    Long id = 1L;
+    Atm atm = atmService.getAtm(id);
     return new ATMTransactionsResponse(atm);
   }
 }

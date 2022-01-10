@@ -49,10 +49,12 @@ public class BankAccountController {
   @PostMapping("/withdraw")
   @ResponseBody
   public BankAccountWithdrawResponse withdraw(@RequestBody BankAccountWithdrawRequest request) {
-    Map<Integer,Integer> withdraw = withdrawService.withdraw(request.getAccountNumber(), request.getPin(), request.getAmount());
+    Long id = 1L;
+    Map<Integer,Integer> notesToBeDispensed = withdrawService.withdraw(request.getAccountNumber(), request.getPin(), request.getAmount(), id);
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
     BigDecimal balance = account.getCurrentBalance();
+    BigDecimal overdraft = account.getOverdraft();
     
-    return new BankAccountWithdrawResponse(request.getAccountNumber(), withdraw, balance);
+    return new BankAccountWithdrawResponse(request.getAccountNumber(), notesToBeDispensed, balance, overdraft);
   }
 }

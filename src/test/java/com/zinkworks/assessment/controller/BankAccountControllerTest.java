@@ -124,7 +124,7 @@ class BankAccountControllerTest {
   @Test
   void withdraw_givenServiceProcessOperation_shouldReturn200() throws Exception {
     
-    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200)))
+    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200), 1L))
       .thenReturn(Map.of(50, 4, 20, 0, 10, 0, 5, 0));
     
     when(bankAccountService.getBankAccount(1L, 1234))
@@ -151,7 +151,7 @@ class BankAccountControllerTest {
   @Test
   void withdraw_givenAccountHasNotEnoughMoney_shouldReturn400() throws Exception {
     
-    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200)))
+    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200), 1L))
       .thenThrow(InsufficientBankAccountFundsException.class);
     
     final String balanceRequest = "{\n"
@@ -173,7 +173,7 @@ class BankAccountControllerTest {
   @Test
   void withdraw_givenATMHasNotEnoughMoney_shouldReturn400() throws Exception {
     
-    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200)))
+    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200), 1L))
       .thenThrow(InsufficientAtmFundsException.class);
     
     final String balanceRequest = "{\n"

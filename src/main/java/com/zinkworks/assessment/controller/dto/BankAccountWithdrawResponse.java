@@ -10,15 +10,20 @@ public class BankAccountWithdrawResponse {
   private LocalDateTime date = LocalDateTime.now();
   private Long accountNumber;
   private BigDecimal balance;
+  private BigDecimal overdraft;
   
-  public BankAccountWithdrawResponse(Long accountNumber, Map<Integer, Integer> notes, BigDecimal balance) {
+  public BankAccountWithdrawResponse(Long accountNumber, Map<Integer, Integer> notes, BigDecimal balance, BigDecimal overdraft) {
     this.notes = notes;
     this.accountNumber = accountNumber;
     this.balance = balance;
+    this.overdraft = overdraft;
   }
   
   public BigDecimal getBalance() {
     return balance;
+  }
+  public BigDecimal getOverdraft() {
+    return overdraft;
   }
   
   public Map<Integer, Integer> getNotes() {

@@ -2,12 +2,10 @@ package com.zinkworks.assessment.model;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,53 +20,46 @@ public class Atm {
   private Long id;
   private BigDecimal balance;
   
-  @ElementCollection
-  private Map<Integer, Integer> notesAvailable;
+  private Integer fifthNotes;
+  private Integer twentyNotes;
+  private Integer tenNotes;
+  private Integer fiveNotes;
   
   @OneToMany(mappedBy = "atm")
   private List<ATMOperation> operations;
-
-  public Atm() {
-    balance = BigDecimal.valueOf(1500D);
-    operations = new LinkedList<>();
-    notesAvailable = new TreeMap<>(Comparator.reverseOrder());
-    notesAvailable.put(50, 10);
-    notesAvailable.put(20, 30);
-    notesAvailable.put(10, 30);
-    notesAvailable.put(5, 20);
-  }
   
-  public BigDecimal getBalance() {
-    return operations
-        .stream()
-        .map(operation -> operation.getAmount())
-        .reduce(balance, BigDecimal::subtract);
+  public Atm() {
   }
   
   public Map<Integer, Integer> getNotesAvailable() {
-    TreeMap<Integer, Integer> copy = new TreeMap<>(Comparator.reverseOrder());
-    copy.putAll(Map.copyOf(notesAvailable));
-    return copy;
-  }
-
-  public boolean subtract(BigDecimal withdrawAmount, Map<Integer, Integer> summaryOfNotes) {
-    ATMOperation atmOperation = new ATMOperation(OperationType.WITHDRAW, withdrawAmount);
-    
-    if (operations.add(atmOperation)) {
-      summaryOfNotes
-        .entrySet()
-        .stream()
-        .forEach(entry -> {
-          int newValue = notesAvailable.get(entry.getKey()) - entry.getValue();
-          notesAvailable.put(entry.getKey(), newValue); 
-        });
-      return true;
-    } else {
-      return false;
-    }
+    TreeMap<Integer, Integer> notesAvailableMap = new TreeMap<>(Comparator.reverseOrder());
+    notesAvailableMap.put(50, fifthNotes);
+    notesAvailableMap.put(20, twentyNotes);
+    notesAvailableMap.put(10, tenNotes);
+    notesAvailableMap.put(5, fiveNotes);
+    return notesAvailableMap;
   }
 
   public List<ATMOperation> getOperations() {
     return List.copyOf(operations);
+  }
+
+  public void updateNotesQuantity(Integer key, Integer newQuantity) {
+    if(key.equals(50)) {
+      this.fifthNotes = newQuantity;
+    }
+    if(key.equals(20)) {
+      this.twentyNotes = newQuantity;
+    }
+    if(key.equals(10)) {
+      this.tenNotes = newQuantity;
+    }
+    if(key.equals(5)) {
+      this.fiveNotes = newQuantity;
+    }
+  }
+
+  public BigDecimal getBalance() {
+    return balance;
   }
 }

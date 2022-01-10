@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.zinkworks.assessment.model.Atm;
-import com.zinkworks.assessment.service.ATMService;
+import com.zinkworks.assessment.repository.AtmRepository;
 
 @WebMvcTest(controllers = {ATMController.class})
 class ATMControllerTest {
@@ -20,11 +20,12 @@ class ATMControllerTest {
   private MockMvc mockMvc;
   
   @MockBean
-  private ATMService atmService;
+  private AtmRepository atmRepository;
   
   @Test
   void getATMTransactions_shouldReturnATMTransactions() throws Exception {
-    when(atmService.getAtm()).thenReturn(new Atm());
+    Atm atm = new Atm();
+    when(atmRepository.findAllById(1L)).thenReturn(atm);
     mockMvc.perform(get("/atm/transactions")).andExpect(jsonPath("$.balance").value(1500))
     .andExpect(jsonPath("$.statements").isEmpty());
   }
