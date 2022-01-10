@@ -4,19 +4,27 @@ import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 import com.zinkworks.assessment.service.exception.InsufficientBankAccountFundsException;
 import com.zinkworks.assessment.service.exception.InvalidAmountException;
 import com.zinkworks.assessment.service.exception.InvalidPinException;
 
+@Entity
 public class BankAccount {
   
-  public static BankAccount ACCOUNT_1 = new BankAccount(123456789L, 1234, BigDecimal.valueOf(800), BigDecimal.valueOf(200));
-  public static BankAccount ACCOUNT_2 = new BankAccount(987654321L, 4321, BigDecimal.valueOf(1230), BigDecimal.valueOf(150));
-
+  //public static BankAccount ACCOUNT_1 = new BankAccount(123456789L, 1234, BigDecimal.valueOf(800), BigDecimal.valueOf(200));
+  //public static BankAccount ACCOUNT_2 = new BankAccount(987654321L, 4321, BigDecimal.valueOf(1230), BigDecimal.valueOf(150));
+  
+  @Id
   private Long accountNumber;
   private Integer pin;
   private BigDecimal balance;
   private BigDecimal overdraft;
+  
+  @OneToMany(mappedBy = "bankAccount")
   private List<BankAccountOperation> operations;
   
   public BankAccount(){

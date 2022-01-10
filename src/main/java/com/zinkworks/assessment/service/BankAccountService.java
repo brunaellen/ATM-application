@@ -13,10 +13,12 @@ import com.zinkworks.assessment.service.exception.InvalidPinException;
 
 @Service
 public class BankAccountService {
-  
-  private final List<BankAccount> accounts = Arrays.asList(BankAccount.ACCOUNT_1, BankAccount.ACCOUNT_2);
 
   public BankAccount getBankAccount(Long accountNumber, Integer pin) {
+    BankAccount firstAccount = new BankAccount(123456789L, 1234, BigDecimal.valueOf(800), BigDecimal.valueOf(200));
+    BankAccount secondAccount = new BankAccount(987654321L, 4321, BigDecimal.valueOf(1230), BigDecimal.valueOf(150));
+    List<BankAccount> accounts = Arrays.asList(firstAccount, secondAccount);
+    
     final Optional<BankAccount> account = accounts
       .stream()
       .filter(bankAccount -> bankAccount.getAccountNumber().equals(accountNumber))
