@@ -27,6 +27,9 @@ public class Atm {
   
   @OneToMany(mappedBy = "atm")
   private List<ATMOperation> operations;
+  
+  public Atm() {
+  }
 
   public Atm(Long id, BigDecimal balance, Integer fifthNotes, Integer twentyNotes, Integer tenNotes, Integer fiveNotes) {
     this.id = id;
