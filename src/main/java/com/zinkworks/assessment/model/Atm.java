@@ -27,10 +27,16 @@ public class Atm {
   
   @OneToMany(mappedBy = "atm")
   private List<ATMOperation> operations;
-  
-  public Atm() {
+
+  public Atm(Long id, BigDecimal balance, Integer fifthNotes, Integer twentyNotes, Integer tenNotes, Integer fiveNotes) {
+    this.id = id;
+    this.balance = balance;
+    this.fifthNotes = fifthNotes;
+    this.twentyNotes = twentyNotes;
+    this.tenNotes = tenNotes;
+    this.fiveNotes = fiveNotes;
   }
-  
+
   public Map<Integer, Integer> getNotesAvailable() {
     TreeMap<Integer, Integer> notesAvailableMap = new TreeMap<>(Comparator.reverseOrder());
     notesAvailableMap.put(50, fifthNotes);

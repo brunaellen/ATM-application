@@ -4,6 +4,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,8 +26,7 @@ class ATMControllerTest {
   
   @Test
   void getATMTransactions_shouldReturnATMTransactions() throws Exception {
-    Atm atm = new Atm();
-    when(atmRepository.findAllById(1L)).thenReturn(atm);
+    when(atmRepository.findAllById(1L)).thenReturn(new Atm(1L, BigDecimal.valueOf(100D), 10, 30, 30, 20));
     mockMvc.perform(get("/atm/transactions")).andExpect(jsonPath("$.balance").value(1500))
     .andExpect(jsonPath("$.statements").isEmpty());
   }
