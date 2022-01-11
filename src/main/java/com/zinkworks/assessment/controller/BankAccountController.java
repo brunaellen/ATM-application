@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zinkworks.assessment.controller.dto.BankAccountBalanceRequest;
@@ -31,14 +30,12 @@ public class BankAccountController {
   private WithdrawTransactionService withdrawService;
   
   @PostMapping("/details")
-  @ResponseBody
   public BankAccountResponse getAccount(@RequestBody BankAccountRequest request) {
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
     return new BankAccountResponse(account);
   }
   
   @PostMapping("/balance")
-  @ResponseBody
   public BankAccountBalanceResponse balance(@RequestBody BankAccountBalanceRequest request) {
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
     return new BankAccountBalanceResponse(
@@ -47,7 +44,6 @@ public class BankAccountController {
   }
   
   @PostMapping("/withdraw")
-  @ResponseBody
   public BankAccountWithdrawResponse withdraw(@RequestBody BankAccountWithdrawRequest request) {
     Long id = 1L;
     Map<Integer,Integer> notesToBeDispensed = withdrawService.withdraw(request.getAccountNumber(), request.getPin(), request.getAmount(), id);
