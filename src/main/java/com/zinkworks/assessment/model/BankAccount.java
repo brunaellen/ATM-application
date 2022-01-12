@@ -66,7 +66,7 @@ public class BankAccount {
       this.operations.add(new BankAccountOperation(OperationType.WITHDRAW, amount));
       BigDecimal newBalance = balance.subtract(amount); 
       if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
-        BigDecimal newOverdraft = overdraft.add(newBalance);
+        BigDecimal newOverdraft = overdraft.add(newBalance); 
         newBalance = BigDecimal.ZERO;
         
         balance = newBalance;

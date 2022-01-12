@@ -31,16 +31,16 @@ public class ATMService {
     
     for (Map.Entry<Integer, Integer> notes : atm.getNotesAvailable().entrySet()) {
       Integer currentNoteValue = notes.getKey();
-      Integer currentNoteCount = notes.getValue();
+      Integer currentNoteCount = notes.getValue(); 
       Integer numberOfNotesNeeded = temporaryAmount.divide(BigDecimal.valueOf(currentNoteValue)).intValue();
       BigDecimal amountInCurrentNotes;
-      if (numberOfNotesNeeded <= currentNoteCount) {
-        amountInCurrentNotes = BigDecimal.valueOf(numberOfNotesNeeded * currentNoteValue);
+      if (numberOfNotesNeeded <= currentNoteCount) { 
+        amountInCurrentNotes = BigDecimal.valueOf(numberOfNotesNeeded * currentNoteValue); 
       } else {
         amountInCurrentNotes = BigDecimal.valueOf(currentNoteValue * currentNoteCount);
       }
       
-      temporaryAmount = temporaryAmount.subtract(amountInCurrentNotes);
+      temporaryAmount = temporaryAmount.subtract(amountInCurrentNotes); 
     }
     
     if (temporaryAmount.compareTo(BigDecimal.ZERO) > 0) {
