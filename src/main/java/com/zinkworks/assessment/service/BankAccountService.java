@@ -45,28 +45,30 @@ public class BankAccountService {
     }
   }
 
-  public void withdraw(BankAccount account, BigDecimal amount) {
+  public BigDecimal withdraw(BankAccount account, BigDecimal amount) {
     if (amount.compareTo(BigDecimal.ZERO) <= 0) {
       throw new InvalidAmountException("Amount should be greater than zero");
     }
     
-    if (accountHasEnoughFunds(amount, account)) {
-      accountOperationRepository.save(new BankAccountOperation(OperationType.WITHDRAW, amount, account));
-      Long accountNumber = account.getAccountNumber();
-      
-      BigDecimal newBalance = account.getCurrentBalance().subtract(amount); 
-      if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
-        BigDecimal newOverdraft = account.getOverdraft().add(newBalance);
-        newBalance = BigDecimal.ZERO;
-
-        bankAccountRepository.updateBalance(newBalance, accountNumber);
-        bankAccountRepository.updateOverdraft(newOverdraft, accountNumber);
-      } else {
-        bankAccountRepository.updateBalance(newBalance, accountNumber);
-      }
-    } else {
+    if(!accountHasEnoughFunds(amount, account)) {
       throw new InsufficientBankAccountFundsException();
-    }  
+    }
+    
+    BigDecimal newBalance = account.getBalance().subtract(amount);
+    accountOperationRepository.save(new BankAccountOperation(OperationType.WITHDRAW, amount, account));
+      
+    Long accountNumber = account.getAccountNumber();
+ 
+    if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
+      BigDecimal newOverdraft = account.getOverdraft().add(newBalance);
+      newBalance = BigDecimal.ZERO;
+
+      bankAccountRepository.updateBalance(newBalance, accountNumber);
+      bankAccountRepository.updateOverdraft(newOverdraft, accountNumber);
+    } else {
+      bankAccountRepository.updateBalance(newBalance, accountNumber);
+    }
+    return account.getBalance();
   }
   
   public boolean accountHasEnoughFunds(BigDecimal amount, BankAccount account) {

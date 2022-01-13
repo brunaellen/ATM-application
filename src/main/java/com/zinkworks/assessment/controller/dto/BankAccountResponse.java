@@ -18,7 +18,7 @@ public class BankAccountResponse {
   
   public BankAccountResponse(BankAccount account) {
     this.accountNumber = account.getAccountNumber();
-    this.balance = account.getCurrentBalance();
+    this.balance = account.getBalance();
     this.availableToSpend = account.getTotalFundsAvailable();
     this.statements = account.getOperations();
   }

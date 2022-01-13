@@ -24,7 +24,7 @@ class BankAccountServiceTest {
     assertThatThrownBy( () -> service.withdraw(account , BigDecimal.valueOf(2000)))
       .isInstanceOf(InsufficientBankAccountFundsException.class);
     
-    assertThat(account.getCurrentBalance()).isEqualTo(BigDecimal.valueOf(1000));
+    assertThat(account.getBalance()).isEqualTo(BigDecimal.valueOf(1000));
   }
   
   @Test
@@ -33,7 +33,7 @@ class BankAccountServiceTest {
     
     service.withdraw(account , BigDecimal.valueOf(1000));
     
-    assertThat(account.getCurrentBalance()).isEqualTo(BigDecimal.valueOf(0));
+    assertThat(account.getBalance()).isEqualTo(BigDecimal.valueOf(0));
     assertThat(account.getOverdraft()).isEqualTo(BigDecimal.valueOf(100));
   }
   
@@ -43,7 +43,7 @@ class BankAccountServiceTest {
     
     service.withdraw(account , BigDecimal.valueOf(1100));
     
-    assertThat(account.getCurrentBalance()).isEqualTo(BigDecimal.valueOf(0));
+    assertThat(account.getBalance()).isEqualTo(BigDecimal.valueOf(0));
     assertThat(account.getOverdraft()).isEqualTo(BigDecimal.valueOf(0));
   }
   
@@ -53,12 +53,12 @@ class BankAccountServiceTest {
     
     assertThatThrownBy( () -> service.withdraw(account , BigDecimal.valueOf(-1))).isInstanceOf(InvalidAmountException.class);
     
-    assertThat(account.getCurrentBalance()).isEqualTo(BigDecimal.valueOf(1000));
+    assertThat(account.getBalance()).isEqualTo(BigDecimal.valueOf(1000));
     assertThat(account.getOverdraft()).isEqualTo(BigDecimal.valueOf(100));
     
     assertThatThrownBy( () -> service.withdraw(account , BigDecimal.valueOf(0))).isInstanceOf(InvalidAmountException.class);
     
-    assertThat(account.getCurrentBalance()).isEqualTo(BigDecimal.valueOf(1000));
+    assertThat(account.getBalance()).isEqualTo(BigDecimal.valueOf(1000));
     assertThat(account.getOverdraft()).isEqualTo(BigDecimal.valueOf(100));
   }
   

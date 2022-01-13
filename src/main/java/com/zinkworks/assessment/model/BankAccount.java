@@ -48,7 +48,7 @@ public class BankAccount {
     throw new InvalidPinException();
   }
   
-  public BigDecimal getCurrentBalance() {
+  public BigDecimal getBalance() {
     return balance;
   }
   

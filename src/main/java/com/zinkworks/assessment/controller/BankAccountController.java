@@ -39,7 +39,7 @@ public class BankAccountController {
   public BankAccountBalanceResponse balance(@RequestBody BankAccountBalanceRequest request) {
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
     return new BankAccountBalanceResponse(
-        account.getCurrentBalance(),
+        account.getBalance(),
         account.getTotalFundsAvailable());
   }
   
@@ -48,7 +48,7 @@ public class BankAccountController {
     Long id = 1L;
     Map<Integer,Integer> notesToBeDispensed = withdrawService.withdraw(request.getAccountNumber(), request.getPin(), request.getAmount(), id);
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
-    BigDecimal balance = account.getCurrentBalance();
+    BigDecimal balance = account.getBalance();
     BigDecimal overdraft = account.getOverdraft();
     
     return new BankAccountWithdrawResponse(request.getAccountNumber(), notesToBeDispensed, balance, overdraft);
