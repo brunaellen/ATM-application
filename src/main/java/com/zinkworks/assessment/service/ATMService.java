@@ -64,28 +64,46 @@ public class ATMService {
   
   public Map<Integer, Integer> withdraw(BigDecimal amount, Long id) {
     Atm atm = atmRepository.findAllById(id);
+    
+    final BigDecimal newBalance = atm.getBalance().subtract(amount);
+    atmRepository.updateAtmBalance(newBalance, id);
+    
     atmOperationRepository.save(new ATMOperation(OperationType.WITHDRAW, amount, atm));
     
-    Map<Integer, Integer> notes = getWithdrawSummaryNotes(amount, id);
-    updateAtmNotesQuantity(notes, id);
-    
-    BigDecimal newBalance = atm.getBalance().subtract(amount);
-    
-    atmRepository.updateAtmBalance(newBalance, id);
-    return notes;
+    Map<Integer, Integer> notesToBeDispensed = getWithdrawSummaryNotes(amount, id);
+    updateAtmNotesQuantity(notesToBeDispensed, id);
+
+    return notesToBeDispensed;
   }
   
-  public void updateAtmNotesQuantity(Map<Integer, Integer> summaryOfNotes, Long id) {
-    Atm atm = atmRepository.findAllById(id);  
+  public Map<Integer, Integer> updateAtmNotesQuantity(Map<Integer, Integer> notesToBeDispensed, Long id) {
+    Atm atm = atmRepository.findAllById(id);
     Map<Integer, Integer> notesAvailableMap = atm.getNotesAvailable();
-
-    summaryOfNotes
+    
+    notesToBeDispensed
       .entrySet()
       .stream()
       .forEach(entry -> {
-        int newValue = notesAvailableMap.get(entry.getKey()) - entry.getValue();
-        atm.updateNotesQuantity(entry.getKey(), newValue);
+        int olderValue = notesAvailableMap.get(entry.getKey());
+        int newValue = olderValue - entry.getValue();
+      
+        if(newValue < olderValue && entry.getKey().equals(50)) {
+          atmRepository.updateQuantityOfFifthNotes(id, newValue);
+        }
+        
+        if(newValue < olderValue && entry.getKey().equals(20)) {
+          atmRepository.updateQuantityOfTwentyNotes(id, newValue);
+        }
+        
+        if(newValue < olderValue && entry.getKey().equals(10)) {
+          atmRepository.updateQuantityOfTenNotes(id, newValue);
+        }
+        
+        if(newValue < olderValue && entry.getKey().equals(5)) {
+          atmRepository.updateQuantityOfFiveNotes(id, newValue);
+        }
       });
+    return notesAvailableMap;
   }
 
   public Map<Integer, Integer> getWithdrawSummaryNotes(BigDecimal withdrawAmount, Long id) {

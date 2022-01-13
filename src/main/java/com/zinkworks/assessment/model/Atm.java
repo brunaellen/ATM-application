@@ -53,21 +53,6 @@ public class Atm {
     return List.copyOf(operations);
   }
 
-  public void updateNotesQuantity(Integer key, Integer newQuantity) {
-    if(key.equals(50)) {
-      this.fifthNotes = newQuantity;
-    }
-    if(key.equals(20)) {
-      this.twentyNotes = newQuantity;
-    }
-    if(key.equals(10)) {
-      this.tenNotes = newQuantity;
-    }
-    if(key.equals(5)) {
-      this.fiveNotes = newQuantity;
-    }
-  }
-
   public BigDecimal getBalance() {
     return balance;
   }
