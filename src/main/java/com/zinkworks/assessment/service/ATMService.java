@@ -76,7 +76,7 @@ public class ATMService {
     return notesToBeDispensed;
   }
   
-  public Map<Integer, Integer> updateAtmNotesQuantity(Map<Integer, Integer> notesToBeDispensed, Long id) {
+  private Map<Integer, Integer> updateAtmNotesQuantity(Map<Integer, Integer> notesToBeDispensed, Long id) {
     Atm atm = atmRepository.findAllById(id);
     Map<Integer, Integer> notesAvailableMap = atm.getNotesAvailable();
     
@@ -106,7 +106,7 @@ public class ATMService {
     return notesAvailableMap;
   }
 
-  public Map<Integer, Integer> getWithdrawSummaryNotes(BigDecimal withdrawAmount, Long id) {
+  private Map<Integer, Integer> getWithdrawSummaryNotes(BigDecimal withdrawAmount, Long id) {
     Atm atm = atmRepository.findAllById(id);
     
     Map<Integer, Integer> summary = new HashMap<>();
