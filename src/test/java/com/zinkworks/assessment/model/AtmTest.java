@@ -8,14 +8,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {Atm.class})
 class AtmTest {
 
-  @Autowired
-  private Atm atm;
+  private Atm atm = new Atm(1L, BigDecimal.valueOf(1500D), 10, 30, 30, 20);;
   
   @Test
   void getBalance_shouldReturnAtmInitialValue() {
@@ -30,5 +28,10 @@ class AtmTest {
     notesAvailable.put(20, 30);
     notesAvailable.put(50, 10);
     assertThat(atm.getNotesAvailable()).isEqualTo(notesAvailable);
+  }
+
+  @Test
+  void getOperations_shouldReturnEmptyOperations() {
+    assertThat(atm.getOperations()).isEmpty();
   }
 }
