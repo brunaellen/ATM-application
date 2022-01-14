@@ -13,13 +13,13 @@ public class BankAccountResponse {
   private Long accountNumber;
   private LocalDateTime date = LocalDateTime.now();
   private BigDecimal balance;
-  private BigDecimal availableToSpend;
+  private BigDecimal totalFundsAvailable;
   private List<BankAccountOperation> statements;
   
-  public BankAccountResponse(BankAccount account) {
+  public BankAccountResponse(BankAccount account, BigDecimal totalFundsAvailable) {
     this.accountNumber = account.getAccountNumber();
     this.balance = account.getBalance();
-    this.availableToSpend = account.getTotalFundsAvailable();
+    this.totalFundsAvailable = totalFundsAvailable;
     this.statements = account.getOperations();
   }
   
@@ -36,12 +36,11 @@ public class BankAccountResponse {
     return balance;
   }
 
-  public BigDecimal getAvailableToSpend() {
-    return availableToSpend;
+  public BigDecimal getTotalFundsAvailable() {
+    return totalFundsAvailable;
   }
 
   public List<BankAccountOperation> getStatements() {
     return statements;
   }
-
 }

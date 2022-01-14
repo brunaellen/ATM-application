@@ -78,6 +78,6 @@ public class BankAccountService {
   }
   
   public BigDecimal getTotalFundsAvailable(BankAccount account) {
-    return account.getTotalFundsAvailable();
+    return account.getBalance().add(account.getOverdraft());
   }
 }

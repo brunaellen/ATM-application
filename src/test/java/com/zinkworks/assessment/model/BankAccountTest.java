@@ -13,12 +13,6 @@ class BankAccountTest {
   private BankAccount account = new BankAccount(123456789L, 1234, BigDecimal.valueOf(800), BigDecimal.valueOf(200));
   
   @Test
-  void getTotalFundsAvailable_ShouldReturnSumOfBalanceAndOverdraft() {
-    assertThat(account.getTotalFundsAvailable())
-      .isEqualByComparingTo(BigDecimal.valueOf(1000D));
-  }
-  
-  @Test
   void getAccountNumber_ShouldReturnAccountNumber() {
     assertThat(account.getAccountNumber()).isEqualTo(123456789L);
   }

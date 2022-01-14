@@ -30,10 +30,6 @@ public class BankAccount {
     this.overdraft = overdraft;
     this.operations = new LinkedList<>();
   }
-  
-  public BigDecimal getTotalFundsAvailable() {
-    return balance.add(overdraft);
-  }
 
   public Long getAccountNumber() {
     return accountNumber;

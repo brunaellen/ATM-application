@@ -32,15 +32,17 @@ public class BankAccountController {
   @PostMapping("/details")
   public BankAccountResponse getAccount(@RequestBody BankAccountRequest request) {
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
-    return new BankAccountResponse(account);
+    BigDecimal totalFundsAvailable = bankAccountService.getTotalFundsAvailable(account);
+    return new BankAccountResponse(account, totalFundsAvailable);
   }
   
   @PostMapping("/balance")
   public BankAccountBalanceResponse balance(@RequestBody BankAccountBalanceRequest request) {
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
+    BigDecimal totalFundsAvailable = bankAccountService.getTotalFundsAvailable(account);
     return new BankAccountBalanceResponse(
-        account.getBalance(),
-        account.getTotalFundsAvailable());
+        account.getBalance(), 
+        totalFundsAvailable);
   }
   
   @PostMapping("/withdraw")
