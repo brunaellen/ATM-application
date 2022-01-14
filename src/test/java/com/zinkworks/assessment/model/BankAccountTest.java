@@ -13,7 +13,33 @@ class BankAccountTest {
   private BankAccount account = new BankAccount(123456789L, 1234, BigDecimal.valueOf(800), BigDecimal.valueOf(200));
   
   @Test
-  void isPinValid_givenACorrectPinShouldReturnTrue() {
-    assertThat(account.isPinValid(1234)).isTrue();
+  void getTotalFundsAvailable_ShouldReturnSumOfBalanceAndOverdraft() {
+    assertThat(account.getTotalFundsAvailable())
+      .isEqualByComparingTo(BigDecimal.valueOf(1000D));
+  }
+  
+  @Test
+  void getAccountNumber_ShouldReturnAccountNumber() {
+    assertThat(account.getAccountNumber()).isEqualTo(123456789L);
+  }
+  
+  @Test
+  void getPin_ShouldReturnPin() {
+    assertThat(account.getPin()).isEqualTo(1234);
+  }
+  
+  @Test
+  void getBalance_ShouldReturnBalance() {
+    assertThat(account.getBalance()).isEqualByComparingTo(BigDecimal.valueOf(800D));
+  }
+  
+  @Test
+  void getOverdraft_ShouldReturnOverdraft() {
+    assertThat(account.getOverdraft()).isEqualByComparingTo(BigDecimal.valueOf(200D));
+  }
+  
+  @Test
+  void getOperations_ShouldReturnEmptyIfNoOperationsExecuted() {
+    assertThat(account.getOperations()).isEmpty();
   }
 }
