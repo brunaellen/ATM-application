@@ -1,6 +1,7 @@
 package com.zinkworks.assessment.model;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class Atm {
     this.twentyNotes = twentyNotes;
     this.tenNotes = tenNotes;
     this.fiveNotes = fiveNotes;
+    this.operations = new ArrayList<>();
   }
 
   public Map<Integer, Integer> getNotesAvailable() {
