@@ -12,6 +12,7 @@ import com.zinkworks.assessment.model.Atm;
 import com.zinkworks.assessment.model.OperationType;
 import com.zinkworks.assessment.repository.ATMOperationRepository;
 import com.zinkworks.assessment.repository.AtmRepository;
+import com.zinkworks.assessment.service.exception.InvalidAmountException;
 
 @Service
 public class ATMService {
@@ -63,6 +64,19 @@ public class ATMService {
   }
   
   public Map<Integer, Integer> withdraw(BigDecimal amount, Long id) {
+    
+    if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new InvalidAmountException("Amount should be greater than zero");
+    }
+
+    if(!hasEnoughFunds(amount, id)) {
+      throw new InvalidAmountException("There is not enough money to process the withdraw.");
+    }
+    
+    if(!canProcessWithdraw(amount, id)) {
+      throw new InvalidAmountException("There is no combination of notes to process the withdraw.");
+    }
+    
     Atm atm = atmRepository.findAllById(id);
     
     final BigDecimal newBalance = atm.getBalance().subtract(amount);
