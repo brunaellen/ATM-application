@@ -1,7 +1,6 @@
 package com.zinkworks.assessment.service;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +23,13 @@ public class BankAccountService {
   @Autowired
   BankAccountOperationRepository accountOperationRepository;
 
-  public BankAccount getBankAccount(Long accountNumber, Integer pin) {
-    List<BankAccount> accounts = bankAccountRepository.findByAccountNumberAndPin(accountNumber, pin);
-    
-    final Optional<BankAccount> account = accounts
-      .stream()
-      .filter(bankAccount -> bankAccount.getAccountNumber().equals(accountNumber))
-      .findAny();
+  public BankAccount getBankAccount(Long accountNumber, Integer pinProvided) {
+    final Optional<BankAccount> account = bankAccountRepository.findByAccountNumber(accountNumber);
     
     if (account.isEmpty()) {
       throw new AccountNotFoundException();
     } else {
-      if (account.get().isPinValid(pin)) {
+      if (account.get().getPin().equals(pinProvided)) {
         return account.get();
       } else {
         throw new InvalidPinException();

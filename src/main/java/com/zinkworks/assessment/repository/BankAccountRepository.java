@@ -1,7 +1,7 @@
 package com.zinkworks.assessment.repository;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,7 +12,7 @@ import com.zinkworks.assessment.model.BankAccount;
 
 @Repository
 public interface BankAccountRepository extends JpaRepository<BankAccount, Long> {
-  List<BankAccount> findByAccountNumberAndPin(Long accountNumber, Integer pin);
+  Optional<BankAccount> findByAccountNumber(Long accountNumber);
   
   @Modifying(clearAutomatically = true)
   @Query("update BankAccount b set b.balance = ?1 where b.accountNumber = ?2")

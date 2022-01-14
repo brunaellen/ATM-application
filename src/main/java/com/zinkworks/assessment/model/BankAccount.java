@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.zinkworks.assessment.service.exception.InvalidPinException;
-
 @Entity
 public class BankAccount {
 
@@ -41,11 +39,8 @@ public class BankAccount {
     return accountNumber;
   }
 
-  public boolean isPinValid(Integer pinProvided) {
-    if(pinProvided.equals(pin)) {
-      return true;
-    }
-    throw new InvalidPinException();
+  public Integer getPin() {
+    return pin;
   }
   
   public BigDecimal getBalance() {
