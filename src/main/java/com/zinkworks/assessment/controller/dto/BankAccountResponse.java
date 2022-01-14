@@ -13,12 +13,14 @@ public class BankAccountResponse {
   private Long accountNumber;
   private LocalDateTime date = LocalDateTime.now();
   private BigDecimal balance;
+  private BigDecimal overdraft;
   private BigDecimal totalFundsAvailable;
   private List<BankAccountOperation> statements;
   
   public BankAccountResponse(BankAccount account, BigDecimal totalFundsAvailable) {
     this.accountNumber = account.getAccountNumber();
     this.balance = account.getBalance();
+    this.overdraft = account.getOverdraft();
     this.totalFundsAvailable = totalFundsAvailable;
     this.statements = account.getOperations();
   }
@@ -34,6 +36,10 @@ public class BankAccountResponse {
 
   public BigDecimal getBalance() {
     return balance;
+  }
+  
+  public BigDecimal getOverdraft() {
+    return overdraft;
   }
 
   public BigDecimal getTotalFundsAvailable() {
