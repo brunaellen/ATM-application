@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.zinkworks.assessment.model.Atm;
 import com.zinkworks.assessment.model.BankAccount;
 
 @Service
@@ -23,8 +24,10 @@ public class WithdrawTransactionService {
     BankAccount account = bankAccountService.getBankAccount(accountNumber, pin);
   
     bankAccountService.withdraw(account, amount);
+    
+    Atm atm = atmService.getAtm(id);
 
-    Map<Integer, Integer> notesToBeDispensed = atmService.withdraw(amount, id);
+    Map<Integer, Integer> notesToBeDispensed = atmService.withdraw(amount, atm);
     return notesToBeDispensed;
   }
 }

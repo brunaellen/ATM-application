@@ -3,6 +3,7 @@ package com.zinkworks.assessment.service;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.zinkworks.assessment.model.Atm;
 import com.zinkworks.assessment.model.OperationType;
 import com.zinkworks.assessment.repository.ATMOperationRepository;
 import com.zinkworks.assessment.repository.AtmRepository;
+import com.zinkworks.assessment.service.exception.AtmNotFoundException;
 import com.zinkworks.assessment.service.exception.InvalidAmountException;
 
 @Service
@@ -23,9 +25,7 @@ public class ATMService {
   @Autowired
   private ATMOperationRepository atmOperationRepository;
   
-  public boolean hasEnoughFunds(BigDecimal withdrawAmount, Long id) {
-    Atm atm = atmRepository.findAllById(id);
-    
+  public boolean hasEnoughFunds(BigDecimal withdrawAmount, Atm atm) {
     if(withdrawAmount.compareTo(atm.getBalance()) <= 0) {
       return true;
     } else {
@@ -33,9 +33,7 @@ public class ATMService {
     }
   }
 
-  public boolean canProcessWithdraw(BigDecimal withdrawAmount, Long id) {
-    Atm atm = atmRepository.findAllById(id);
-    
+  public boolean canProcessWithdraw(BigDecimal withdrawAmount, Atm atm) {
     if (withdrawAmount.compareTo(BigDecimal.ZERO) <= 0) {
       return false;
     }
@@ -63,35 +61,32 @@ public class ATMService {
     }
   }
   
-  public Map<Integer, Integer> withdraw(BigDecimal amount, Long id) {
+  public Map<Integer, Integer> withdraw(BigDecimal amount, Atm atm) {
     
     if (amount.compareTo(BigDecimal.ZERO) <= 0) {
       throw new InvalidAmountException("Amount should be greater than zero");
     }
 
-    if(!hasEnoughFunds(amount, id)) {
+    if(!hasEnoughFunds(amount, atm)) {
       throw new InvalidAmountException("There is not enough money to process the withdraw.");
     }
     
-    if(!canProcessWithdraw(amount, id)) {
+    if(!canProcessWithdraw(amount, atm)) {
       throw new InvalidAmountException("There is no combination of notes to process the withdraw.");
     }
-    
-    Atm atm = atmRepository.findAllById(id);
-    
+
     final BigDecimal newBalance = atm.getBalance().subtract(amount);
-    atmRepository.updateAtmBalance(newBalance, id);
+    atmRepository.updateAtmBalance(newBalance, atm.getId());
     
     atmOperationRepository.save(new ATMOperation(OperationType.WITHDRAW, amount, atm));
     
-    Map<Integer, Integer> notesToBeDispensed = getWithdrawSummaryNotes(amount, id);
-    updateAtmNotesQuantity(notesToBeDispensed, id);
+    Map<Integer, Integer> notesToBeDispensed = getWithdrawSummaryNotes(amount, atm);
+    updateAtmNotesQuantity(notesToBeDispensed, atm);
 
     return notesToBeDispensed;
   }
   
-  private Map<Integer, Integer> updateAtmNotesQuantity(Map<Integer, Integer> notesToBeDispensed, Long id) {
-    Atm atm = atmRepository.findAllById(id);
+  private Map<Integer, Integer> updateAtmNotesQuantity(Map<Integer, Integer> notesToBeDispensed, Atm atm) {
     Map<Integer, Integer> notesAvailableMap = atm.getNotesAvailable();
     
     notesToBeDispensed
@@ -102,27 +97,25 @@ public class ATMService {
         int newValue = olderValue - entry.getValue();
       
         if(newValue < olderValue && entry.getKey().equals(50)) {
-          atmRepository.updateQuantityOfFifthNotes(id, newValue);
+          atmRepository.updateQuantityOfFifthNotes(atm.getId(), newValue);
         }
         
         if(newValue < olderValue && entry.getKey().equals(20)) {
-          atmRepository.updateQuantityOfTwentyNotes(id, newValue);
+          atmRepository.updateQuantityOfTwentyNotes(atm.getId(), newValue);
         }
         
         if(newValue < olderValue && entry.getKey().equals(10)) {
-          atmRepository.updateQuantityOfTenNotes(id, newValue);
+          atmRepository.updateQuantityOfTenNotes(atm.getId(), newValue);
         }
         
         if(newValue < olderValue && entry.getKey().equals(5)) {
-          atmRepository.updateQuantityOfFiveNotes(id, newValue);
+          atmRepository.updateQuantityOfFiveNotes(atm.getId(), newValue);
         }
       });
     return notesAvailableMap;
   }
 
-  private Map<Integer, Integer> getWithdrawSummaryNotes(BigDecimal withdrawAmount, Long id) {
-    Atm atm = atmRepository.findAllById(id);
-    
+  private Map<Integer, Integer> getWithdrawSummaryNotes(BigDecimal withdrawAmount, Atm atm) {
     Map<Integer, Integer> summary = new HashMap<>();
     BigDecimal temporaryAmount = withdrawAmount;
     
@@ -144,6 +137,11 @@ public class ATMService {
   
   
   public Atm getAtm(Long id) {
-    return atmRepository.findAllById(id);
+    final Optional<Atm> atm = atmRepository.findAllById(id);
+    
+    if(atm.isEmpty()) {
+      throw new AtmNotFoundException();
+    }
+    return atm.get();
   }
 }

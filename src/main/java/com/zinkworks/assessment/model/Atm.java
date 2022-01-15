@@ -58,4 +58,8 @@ public class Atm {
   public BigDecimal getBalance() {
     return balance;
   }
+
+  public Long getId() {
+    return id;
+  }
 }
