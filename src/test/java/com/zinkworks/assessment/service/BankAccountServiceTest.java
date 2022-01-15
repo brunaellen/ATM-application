@@ -71,7 +71,7 @@ class BankAccountServiceTest {
   }
   
   @Test
-  void withdraw_ifAmountGreaterThanZero_shouldThrowExceptionAndNotChangeBalance() {
+  void withdraw_ifAmountLessThanOrEqualsToZero_shouldThrowExceptionAndNotChangeBalance() {
     BankAccount account = new BankAccount(1L, 1, BigDecimal.valueOf(200), BigDecimal.valueOf(100));
     
     assertThatThrownBy( () -> service.withdraw(account , BigDecimal.valueOf(-1))).isInstanceOf(InvalidAmountException.class);
@@ -97,7 +97,7 @@ class BankAccountServiceTest {
   }
   
   @Test
-  void withdraw_ifAccountHasEnoughBalanceAndAmountGreaterThanZero_shouldWithdrawAmount() {
+  void withdraw_ifAccountHasEnoughBalanceAndAmountGreaterThanZero_shouldWithdrawAmount_returnNewBalance() {
     
     BankAccount account = new BankAccount(1L, 1, BigDecimal.valueOf(200), BigDecimal.valueOf(100));
     BigDecimal newBalance = service.withdraw(account , BigDecimal.valueOf(50));

@@ -13,7 +13,7 @@ import com.zinkworks.assessment.model.Atm;
 @Repository
 public interface AtmRepository extends JpaRepository<Atm, Long> {
   Optional<Atm> findAllById(Long id);
-
+  
   @Modifying(clearAutomatically = true)
   @Query("update Atm a set a.balance = ?1 where a.id = ?2")
   void updateAtmBalance(BigDecimal updatedBalance, Long id);
