@@ -66,7 +66,7 @@ public class BankAccountService {
     } else {
       bankAccountRepository.updateBalance(newBalance, accountNumber);
     }
-    return account.getBalance();
+    return newBalance;
   }
   
   public boolean accountHasEnoughFunds(BigDecimal amount, BankAccount account) {
