@@ -1,9 +1,10 @@
 package com.zinkworks.assessment.service;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -86,37 +87,41 @@ public class ATMService {
     return notesToBeDispensed;
   }
   
-  private Map<Integer, Integer> updateAtmNotesQuantity(Map<Integer, Integer> notesToBeDispensed, Atm atm) {
-    Map<Integer, Integer> notesAvailableMap = atm.getNotesAvailable();
+  protected Map<Integer, Integer> updateAtmNotesQuantity(Map<Integer, Integer> notesToBeDispensed, Atm atm) {
+    Map<Integer, Integer> notesAvailable = atm.getNotesAvailable();
+    Map<Integer, Integer> notesAvailableUpdated = new TreeMap<>(Comparator.reverseOrder());
     
     notesToBeDispensed
       .entrySet()
       .stream()
       .forEach(entry -> {
-        int olderValue = notesAvailableMap.get(entry.getKey());
+        int olderValue = notesAvailable.get(entry.getKey());
         int newValue = olderValue - entry.getValue();
-      
-        if(newValue < olderValue && entry.getKey().equals(50)) {
+        
+        notesAvailableUpdated.put(entry.getKey(), newValue);
+
+        if(entry.getKey().equals(50)) {
           atmRepository.updateQuantityOfFifthNotes(atm.getId(), newValue);
         }
         
-        if(newValue < olderValue && entry.getKey().equals(20)) {
+        if(entry.getKey().equals(20)) {
           atmRepository.updateQuantityOfTwentyNotes(atm.getId(), newValue);
         }
         
-        if(newValue < olderValue && entry.getKey().equals(10)) {
+        if(entry.getKey().equals(10)) {
           atmRepository.updateQuantityOfTenNotes(atm.getId(), newValue);
         }
         
-        if(newValue < olderValue && entry.getKey().equals(5)) {
+        if(entry.getKey().equals(5)) {
           atmRepository.updateQuantityOfFiveNotes(atm.getId(), newValue);
-        }
+        }    
       });
-    return notesAvailableMap;
+    
+    return notesAvailableUpdated;
   }
 
-  private Map<Integer, Integer> getWithdrawSummaryNotes(BigDecimal withdrawAmount, Atm atm) {
-    Map<Integer, Integer> summary = new HashMap<>();
+  public Map<Integer, Integer> getWithdrawSummaryNotes(BigDecimal withdrawAmount, Atm atm) {
+    Map<Integer, Integer> summary = new TreeMap<>(Comparator.reverseOrder());
     BigDecimal temporaryAmount = withdrawAmount;
     
     for (Map.Entry<Integer, Integer> notes : atm.getNotesAvailable().entrySet()) {

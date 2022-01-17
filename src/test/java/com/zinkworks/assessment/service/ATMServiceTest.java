@@ -6,9 +6,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +120,36 @@ class ATMServiceTest {
     service.withdraw(BigDecimal.valueOf(50), atm);
     
     verify(atmRepository).updateAtmBalance(BigDecimal.valueOf(1450), atm.getId());
+  }
+  
+  @Test
+  void updateAtmNotesQuantity_givenNotesToBeDispensedAndAtm_shouldReturnNotesquantityUpdated() {
+    Atm atm = new Atm(1L, BigDecimal.valueOf(1500), 10, 30, 30, 20);
+    
+    Map<Integer, Integer> notesToBeDispensed = new TreeMap<>(Comparator.reverseOrder());
+    notesToBeDispensed.put(50, 2);
+    notesToBeDispensed.put(20, 0);
+    notesToBeDispensed.put(10, 0);
+    notesToBeDispensed.put(5, 0);
+    
+    Map<Integer, Integer> expectedNotesUpdated = new TreeMap<>(Comparator.reverseOrder());
+    expectedNotesUpdated.put(50, 8);
+    expectedNotesUpdated.put(20, 30);
+    expectedNotesUpdated.put(10, 30);
+    expectedNotesUpdated.put(5, 20);
+    
+    assertThat(service.updateAtmNotesQuantity(notesToBeDispensed, atm))
+      .isEqualTo(expectedNotesUpdated);
+  }
+ 
+  @Test
+  void getWithdrawSummaryNotes_givenAmountAndAtm_shouldReturnSummaryOfNotesToBeDispensed() {
+    Atm atm = new Atm(1L, BigDecimal.valueOf(1500), 10, 30, 30, 20);
+    
+    Map<Integer, Integer> expectedSummaryOfNotes = Map.of(50, 2, 20, 0, 10, 0, 5, 0);
+    
+    assertThat(service.getWithdrawSummaryNotes(BigDecimal.valueOf(100), atm))
+      .isEqualTo(expectedSummaryOfNotes);
   }
   
   @Test
