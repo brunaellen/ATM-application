@@ -102,10 +102,10 @@ class ATMServiceTest {
   void withdraw_ifAtmHasEnoughBalanceAndCanProcessWithdraw_shouldReturnNotesToBeDispensed() {
     Atm atm = new Atm(1L, BigDecimal.valueOf(1500), 10, 30, 30, 20);
     
-    Map<Integer, Integer> notesToBeDispensed = service.withdraw(BigDecimal.valueOf(50), atm);
+    Map<Integer, Integer> notesToBeDispensed = service.withdraw(BigDecimal.valueOf(1000), atm);
     Map<Integer, Integer> expectedNotes = new HashMap<>();
-    expectedNotes.put(50, 1);
-    expectedNotes.put(20, 0);
+    expectedNotes.put(50, 10);
+    expectedNotes.put(20, 25);
     expectedNotes.put(10, 0);
     expectedNotes.put(5, 0);
     
