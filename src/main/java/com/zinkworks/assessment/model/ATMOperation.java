@@ -47,7 +47,7 @@ public class ATMOperation {
   }
   
   public String getDate() {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     return date.format(formatter);
   }
 
