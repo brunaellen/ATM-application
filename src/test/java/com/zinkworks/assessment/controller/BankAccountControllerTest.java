@@ -151,9 +151,7 @@ class BankAccountControllerTest {
           .accept(MediaType.APPLICATION_JSON))
       .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.notes.50").value(4))
-      .andExpect(jsonPath("$.accountNumber").value(1))
-      .andExpect(jsonPath("$.balance").value(200));
+      .andExpect(jsonPath("$.accountNumber").value(1));
   }
   
   @Test

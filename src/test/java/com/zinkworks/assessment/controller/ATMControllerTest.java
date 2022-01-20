@@ -6,8 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +28,11 @@ class ATMControllerTest {
   @Test
   void getATMTransactions_shouldReturnATMTransactions() throws Exception {
     when(atmService.getAtm(1L)).thenReturn(new Atm(1L, BigDecimal.valueOf(1500D), 10, 30, 30, 20));
-    
-    TreeMap<String, Integer> notesAvailableMap = new TreeMap<>(Comparator.reverseOrder());
-    notesAvailableMap.put("50", 10);
-    notesAvailableMap.put("20", 30);
-    notesAvailableMap.put("10", 30);
-    notesAvailableMap.put("5", 20);
-    
+
     atmService.getAtm(1L);
     mockMvc.perform(get("/atm/transactions"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.balance").value(1500.00))
-      .andExpect(jsonPath("$.notesAvailable").value(notesAvailableMap))
       .andExpect(jsonPath("$.statements").isEmpty());
   }
 }
