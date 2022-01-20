@@ -3,6 +3,7 @@ package com.zinkworks.assessment.controller.dto;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,11 +23,15 @@ public class BankAccountWithdrawResponse {
   }
 
   public void setNotes(Map<Integer, Integer> notes) {
+    List<Notes> notesList = new ArrayList<>();
+    
     notes.entrySet().forEach(note -> {
       Integer currentFaceNote = note.getKey();
       Integer currentQuantity = note.getValue();
-      this.notes.add(new Notes(currentFaceNote, currentQuantity));
+      notesList.add(new Notes(currentFaceNote, currentQuantity));
     });
+    
+    this.notes = notesList;
   }
 
   public BigDecimal getBalance() {

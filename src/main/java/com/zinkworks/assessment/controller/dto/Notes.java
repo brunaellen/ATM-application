@@ -8,4 +8,12 @@ public class Notes {
     this.faceNotes = faceNotes;
     this.quantity = quantity;
   }
+  
+  public Integer getFaceNotes() {
+    return faceNotes;
+  }
+  
+  public Integer getQuantity() {
+    return quantity;
+  }
 }

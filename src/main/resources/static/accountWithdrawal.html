@@ -43,8 +43,8 @@
           <b>Statements:</b>
           <ul v-for="note in withdrawal.notes">
             <li>
-              Note Value: {{note.key}}<br>
-              Quantity: {{note.value}}<br>
+              Note Value: {{note.faceNotes}}<br>
+              Quantity: {{note.quantity}}<br>
             </li>
           </ul>
         </div>         
@@ -73,14 +73,15 @@
               pin: '',
               amount: ''
             },
+            
             withdrawal: {
               accountNumber: '',
               date: '',
               balance: '',
               overdraft: '',
               notes: [{
-                key: '',
-                value: ''
+                faceNotes: '',
+                quantity: ''
               }]
             }
           }
