@@ -50,9 +50,8 @@ public class BankAccountController {
     Long id = 1L;
     Map<Integer,Integer> notesToBeDispensed = withdrawService.withdraw(request.getAccountNumber(), request.getPin(), request.getAmount(), id);
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
-    BigDecimal balance = account.getBalance();
-    BigDecimal overdraft = account.getOverdraft();
-    
-    return new BankAccountWithdrawResponse(request.getAccountNumber(), notesToBeDispensed, balance, overdraft);
+    BankAccountWithdrawResponse accountWithdrawResponse = new BankAccountWithdrawResponse(account);
+    accountWithdrawResponse.setNotes(notesToBeDispensed);
+    return accountWithdrawResponse;
   }
 }
