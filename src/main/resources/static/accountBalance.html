@@ -29,8 +29,8 @@
 
 
       <div class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="balanceDetails.date">
-        <p><strong>Total funds available:</strong> {{balanceDetails.totalFundsForWithdraw | currency }}</p>
-        <p><strong>Balance:</strong> {{balanceDetails.balance | currency }}</p>
+        <p><strong>Total funds available:</strong> {{balanceDetails.totalFundsForWithdraw | currency('€') }}</p>
+        <p><strong>Balance:</strong> {{balanceDetails.balance | currency('€') }}</p>
         <p><strong>Date:</strong> {{balanceDetails.date}}</p>        
       </div>
       

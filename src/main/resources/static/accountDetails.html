@@ -31,15 +31,15 @@
       <div class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="accounts.date">
         <p><strong>Account number:</strong> {{accounts.accountNumber}}</p>
         <p><strong>Date:</strong> {{accounts.date}}</p>
-        <p><strong>Balance:</strong> {{accounts.balance | currency }}</p>
-        <p><strong>Overdraft:</strong> {{accounts.overdraft | currency }}</p>
-        <p><strong>Total funds available:</strong> {{accounts.totalFundsAvailable | currency }}</p>
+        <p><strong>Balance:</strong> {{accounts.balance | currency('€') }}</p>
+        <p><strong>Overdraft:</strong> {{accounts.overdraft | currency('€') }}</p>
+        <p><strong>Total funds available:</strong> {{accounts.totalFundsAvailable | currency('€') }}</p>
         
         <div id="statements">
           <b>Statements:</b>
           <ul v-for="statement in accounts.statements">
             <li>
-              Amount: {{statement.amount | currency }}<br>
+              Amount: {{statement.amount | currency('€') }}<br>
               Date: {{statement.date}}<br>
               Type: {{statement.type}}<br>
             </li>

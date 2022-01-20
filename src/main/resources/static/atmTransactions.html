@@ -20,13 +20,13 @@
 
       <div class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="transactions.date">
         <p><strong>Date:</strong> {{transactions.date}}</p>
-        <p><strong>Balance:</strong> {{transactions.balance | currency }}</p>
+        <p><strong>Balance:</strong> {{transactions.balance | currency('€') }}</p>
         
         <div id="statements">
           <b>Statements:</b>
           <ul v-for="statement in transactions.statements">
             <li>
-              Amount: {{statement.amount | currency }}<br>
+              Amount: {{statement.amount | currency('€') }}<br>
               Date: {{statement.date}}<br>
               Type: {{statement.type}}<br>
             </li>

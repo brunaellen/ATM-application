@@ -36,8 +36,8 @@
       <div class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="withdrawal.date">
         <p><strong>Account number:</strong> {{withdrawal.accountNumber}}</p>
         <p><strong>Date:</strong> {{withdrawal.date}}</p>
-        <p><strong>Balance:</strong> {{withdrawal.balance | currency }}</p>
-        <p><strong>Overdraft:</strong> {{withdrawal.overdraft | currency }}</p>
+        <p><strong>Balance:</strong> {{withdrawal.balance | currency('€') }}</p>
+        <p><strong>Overdraft:</strong> {{withdrawal.overdraft | currency('€') }}</p>
         
         <div id="withdrawal">
           <b>Notes to be dispensed:</b>
