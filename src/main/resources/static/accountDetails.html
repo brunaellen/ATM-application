@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>ATM</title>
+  </head>
+  
+  <body>
+ 
+  <div class="container-fluid height: 100px bg-primary" style="padding-bottom: 100%">
+   <div id="contents">
+  
+    <h1 class="text-center p-3 text-white">Account Details:</h1>
+
+      <div class="mb-3">
+        <label class="form-label text-white">Account Number</label>
+        <input v-model="account.accountNumber" type="number" class="form-control w-25" id="exampleInputNumber" placeholder="Insert your account number">
+      </div>
+      
+      <div class="mb-3">
+        <label class="form-label text-white">Pin</label>
+        <input v-model="account.pin" type="number" class="form-control w-25" placeholder="Insert your pin number">
+      </div>
+      
+      <button v-on:click="submit()" class="btn btn-primary btn-light">Submit</button>
+      <a class="btn btn-primary btn-light" href="/" role="button">Go Back</a>
+
+
+      <div class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="accounts.date">
+        <p><strong>Account number:</strong> {{accounts.accountNumber}}</p>
+        <p><strong>Date:</strong> {{accounts.date}}</p>
+        <p><strong>Balance:</strong> {{accounts.balance | currency }}</p>
+        <p><strong>Overdraft:</strong> {{accounts.overdraft | currency }}</p>
+        <p><strong>Total funds available:</strong> {{accounts.totalFundsAvailable | currency }}</p>
+        
+        <div id="statements">
+          <b>Statements:</b>
+          <ul v-for="statement in accounts.statements">
+            <li>
+              Amount: {{statement.amount | currency }}<br>
+              Date: {{statement.date}}<br>
+              Type: {{statement.type}}<br>
+            </li>
+          </ul>
+        </div>         
+      </div>
+      
+    </div> 
+  </div>
+     
+  </body>
+  
+  <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue2-filters/dist/vue2-filters.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>  
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  
+  <script>
+      var app = new Vue({
+        el: '#contents',
+        mixins: [Vue2Filters.mixin],
+        
+        data(){
+          return {
+            account: {
+              accountNumber: '',
+              pin: ''
+            },
+            accounts: {
+              accountNumber: '',
+              date: '',
+              balance: '',
+              overdraft: '',
+              totalFundsAvailable: '',
+              statements: [{
+                amount: '',
+                date: '',
+                type: ''
+              }]
+            }
+          }
+        },
+          
+        methods: {
+          submit: function () {
+            axios.post('http://localhost:8080/bankAccount/details', this.account)
+            .then(response => {
+              this.accounts = response.data;
+              console.log(response)
+            })
+            .catch(error => {
+              swal("Try Again!", error.response.data.message, "error")
+                .then(function(){
+                window.location.reload();
+              })
+            });
+          }
+        }
+      });
+    </script>
+    
+</html>
