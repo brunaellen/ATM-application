@@ -8,44 +8,50 @@
   </head>
   
   <body>
+
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
  
-  <div class="container-fluid height: 100px bg-primary" style="padding-bottom: 100%">
-   <div id="contents">
-  
-    <h1 class="text-center p-3 text-white">Atm Transactions</h1>
-      
-      <button v-on:click="submit()" class="btn btn-primary btn-light">Check it</button>
-      <a class="btn btn-primary btn-light" href="/" role="button">Go Back</a>
+    <div class="container-fluid height: 100px bg-primary" style="padding-bottom: 100%">
+      <div id="contents">
+    
+        <h1 class="text-center p-3 text-white">Atm Transactions</h1>
+        
+        <button v-on:click="submit()" class="btn btn-primary btn-light">Check it</button>
+        <a class="btn btn-primary btn-light" href="/" role="button">Go Back</a>
 
 
-      <div class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="transactions.date">
-        <p><strong>Date:</strong> {{transactions.date}}</p>
-        <p><strong>Balance:</strong> {{transactions.balance | currency('€') }}</p>
+        <div v-cloak class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="transactions.date">
+          <p><strong>Date:</strong> {{transactions.date}}</p>
+          <p><strong>Balance:</strong> {{transactions.balance | currency('€') }}</p>
+          
+          <div id="statements">
+            <b>Statements:</b>
+            <ul v-for="statement in transactions.statements">
+              <li>
+                Amount: {{statement.amount | currency('€') }}<br>
+                Date: {{statement.date}}<br>
+                Type: {{statement.type}}<br>
+              </li>
+            </ul>
+          </div> 
+          
+          <div id="notesAvailable">
+            <b>Notes available:</b>
+            <ul v-for="note in transactions.notesAvailable">
+              <li>
+                Note Value: {{note.faceNotes}}<br>
+                Quantity: {{note.quantity}}<br>
+              </li>
+            </ul>
+          </div>    
+        </div>
         
-        <div id="statements">
-          <b>Statements:</b>
-          <ul v-for="statement in transactions.statements">
-            <li>
-              Amount: {{statement.amount | currency('€') }}<br>
-              Date: {{statement.date}}<br>
-              Type: {{statement.type}}<br>
-            </li>
-          </ul>
-        </div> 
-        
-        <div id="notesAvailable">
-          <b>Notes available:</b>
-          <ul v-for="note in transactions.notesAvailable">
-            <li>
-              Note Value: {{note.faceNotes}}<br>
-              Quantity: {{note.quantity}}<br>
-            </li>
-          </ul>
-        </div>    
-      </div>
-      
-    </div> 
-  </div>
+      </div> 
+    </div>
      
   </body>
   

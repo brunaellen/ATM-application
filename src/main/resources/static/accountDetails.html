@@ -8,47 +8,50 @@
   </head>
   
   <body>
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
  
-  <div class="container-fluid height: 100px bg-primary" style="padding-bottom: 100%">
-   <div id="contents">
-  
-    <h1 class="text-center p-3 text-white">Account Details:</h1>
-
-      <div class="mb-3">
-        <label class="form-label text-white">Account Number</label>
-        <input v-model="account.accountNumber" type="number" class="form-control w-25" id="exampleInputNumber" placeholder="Insert your account number">
-      </div>
+    <div class="container-fluid height: 100px bg-primary" style="padding-bottom: 100%">
+      <div id="contents">
       
-      <div class="mb-3">
-        <label class="form-label text-white">Pin</label>
-        <input v-model="account.pin" type="number" class="form-control w-25" placeholder="Insert your pin number">
-      </div>
-      
-      <button v-on:click="submit()" class="btn btn-primary btn-light">Submit</button>
-      <a class="btn btn-primary btn-light" href="/" role="button">Go Back</a>
+        <h1 class="text-center p-3 text-white">Account Details:</h1>
 
-
-      <div class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="accounts.date">
-        <p><strong>Account number:</strong> {{accounts.accountNumber}}</p>
-        <p><strong>Date:</strong> {{accounts.date}}</p>
-        <p><strong>Balance:</strong> {{accounts.balance | currency('€') }}</p>
-        <p><strong>Overdraft:</strong> {{accounts.overdraft | currency('€') }}</p>
-        <p><strong>Total funds available:</strong> {{accounts.totalFundsAvailable | currency('€') }}</p>
+        <div class="mb-3">
+          <label class="form-label text-white">Account Number</label>
+          <input v-model="account.accountNumber" type="number" class="form-control w-25" id="exampleInputNumber" placeholder="Insert your account number">
+        </div>
         
-        <div id="statements">
-          <b>Statements:</b>
-          <ul v-for="statement in accounts.statements">
-            <li>
-              Amount: {{statement.amount | currency('€') }}<br>
-              Date: {{statement.date}}<br>
-              Type: {{statement.type}}<br>
-            </li>
-          </ul>
-        </div>         
-      </div>
-      
-    </div> 
-  </div>
+        <div class="mb-3">
+          <label class="form-label text-white">Pin</label>
+          <input v-model="account.pin" type="number" class="form-control w-25" placeholder="Insert your pin number">
+        </div>
+        
+        <button v-on:click="submit()" class="btn btn-primary btn-light">Submit</button>
+        <a class="btn btn-primary btn-light" href="/" role="button">Go Back</a>
+
+        <div v-cloak class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="accounts.date">
+          <p><strong>Account number:</strong> {{accounts.accountNumber}}</p>
+          <p><strong>Date:</strong> {{accounts.date}}</p>
+          <p><strong>Balance:</strong> {{accounts.balance | currency('€') }}</p>
+          <p><strong>Overdraft:</strong> {{accounts.overdraft | currency('€') }}</p>
+          <p><strong>Total funds available:</strong> {{accounts.totalFundsAvailable | currency('€') }}</p>
+          
+          <div id="statements">
+            <b>Statements:</b>
+            <ul v-for="statement in accounts.statements">
+              <li>
+                Amount: {{statement.amount | currency('€') }}<br>
+                Date: {{statement.date}}<br>
+                Type: {{statement.type}}<br>
+              </li>
+            </ul>
+          </div>         
+        </div>
+      </div> 
+    </div>
      
   </body>
   

@@ -8,50 +8,56 @@
   </head>
   
   <body>
+
+    <style>
+      [v-cloak] {
+        display: none;
+      }
+    </style>
  
-  <div class="container-fluid height: 100px bg-primary" style="padding-bottom: 100%">
-   <div id="contents">
-  
-    <h1 class="text-center p-3 text-white">Account Withdrawal:</h1>
+    <div class="container-fluid height: 100px bg-primary" style="padding-bottom: 100%">
+      <div id="contents">
+    
+        <h1 class="text-center p-3 text-white">Account Withdrawal:</h1>
 
-      <div class="mb-3">
-        <label class="form-label text-white">Account Number</label>
-        <input v-model="account.accountNumber" type="number" class="form-control w-25" id="exampleInputNumber" placeholder="Insert your account number">
-      </div>
-      
-      <div class="mb-3">
-        <label class="form-label text-white">Pin</label>
-        <input v-model="account.pin" type="number" class="form-control w-25" placeholder="Insert your pin number">
-      </div>
-      
-      <div class="mb-3">
-        <label class="form-label text-white">Amount</label>
-        <input v-model="account.amount" type="number" class="form-control w-25" placeholder="Insert amount">
-      </div>
-      
-      <button v-on:click="submit()" class="btn btn-primary btn-light">Submit</button>
-      <a class="btn btn-primary btn-light" href="/" role="button">Go Back</a>
-
-
-      <div class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="withdrawal.date">
-        <p><strong>Account number:</strong> {{withdrawal.accountNumber}}</p>
-        <p><strong>Date:</strong> {{withdrawal.date}}</p>
-        <p><strong>Balance:</strong> {{withdrawal.balance | currency('€') }}</p>
-        <p><strong>Overdraft:</strong> {{withdrawal.overdraft | currency('€') }}</p>
+        <div class="mb-3">
+          <label class="form-label text-white">Account Number</label>
+          <input v-model="account.accountNumber" type="number" class="form-control w-25" id="exampleInputNumber" placeholder="Insert your account number">
+        </div>
         
-        <div id="withdrawal">
-          <b>Notes to be dispensed:</b>
-          <ul v-for="note in withdrawal.notes">
-            <li>
-              Note Value: {{note.faceNotes}}<br>
-              Quantity: {{note.quantity}}<br>
-            </li>
-          </ul>
-        </div>         
-      </div>
-      
-    </div> 
-  </div>
+        <div class="mb-3">
+          <label class="form-label text-white">Pin</label>
+          <input v-model="account.pin" type="number" class="form-control w-25" placeholder="Insert your pin number">
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label text-white">Amount</label>
+          <input v-model="account.amount" type="number" class="form-control w-25" placeholder="Insert amount">
+        </div>
+        
+        <button v-on:click="submit()" class="btn btn-primary btn-light">Submit</button>
+        <a class="btn btn-primary btn-light" href="/" role="button">Go Back</a>
+
+
+        <div v-cloak class="card mt-3 p-3 w-25" id="accountDetailsToShow" v-if="withdrawal.date">
+          <p><strong>Account number:</strong> {{withdrawal.accountNumber}}</p>
+          <p><strong>Date:</strong> {{withdrawal.date}}</p>
+          <p><strong>Balance:</strong> {{withdrawal.balance | currency('€') }}</p>
+          <p><strong>Overdraft:</strong> {{withdrawal.overdraft | currency('€') }}</p>
+          
+          <div id="withdrawal">
+            <b>Notes to be dispensed:</b>
+            <ul v-for="note in withdrawal.notes">
+              <li>
+                Note Value: {{note.faceNotes}}<br>
+                Quantity: {{note.quantity}}<br>
+              </li>
+            </ul>
+          </div>         
+        </div>
+        
+      </div> 
+    </div>
      
   </body>
   
