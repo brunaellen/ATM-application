@@ -20,6 +20,8 @@ public class ATMController {
   public ATMTransactionsResponse getATMTransactions() {
     Long id = 1L;
     Atm atm = atmService.getAtm(id);
-    return new ATMTransactionsResponse(atm);
+    ATMTransactionsResponse transactionResponse = new ATMTransactionsResponse(atm);
+    transactionResponse.setStatements(atm.getNotesAvailable());
+    return transactionResponse;
   }
 }
