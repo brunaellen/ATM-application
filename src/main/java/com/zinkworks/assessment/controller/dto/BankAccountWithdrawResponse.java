@@ -28,7 +28,10 @@ public class BankAccountWithdrawResponse {
     notes.entrySet().forEach(note -> {
       Integer currentFaceNote = note.getKey();
       Integer currentQuantity = note.getValue();
-      notesList.add(new Notes(currentFaceNote, currentQuantity));
+      
+      if(currentQuantity != 0) {
+        notesList.add(new Notes(currentFaceNote, currentQuantity));
+      }
     });
     
     this.notes = notesList;
