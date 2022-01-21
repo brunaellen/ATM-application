@@ -8,14 +8,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = {Atm.class})
 class AtmTest {
 
-  @Autowired
-  private Atm atm;
+  private Atm atm = new Atm(1L, BigDecimal.valueOf(1500D), 10, 30, 30, 20);;
   
   @Test
   void getBalance_shouldReturnAtmInitialValue() {
@@ -31,17 +29,9 @@ class AtmTest {
     notesAvailable.put(50, 10);
     assertThat(atm.getNotesAvailable()).isEqualTo(notesAvailable);
   }
-  
-  @Test
-  void subtract_givenAmountAndSummaryOfNotes_shouldReturnTrueIfWithdrawOccurred() {
-    Map<Integer, Integer> summaryOfNotes = new TreeMap<>(Comparator.reverseOrder());
-    summaryOfNotes.put(5, 0);
-    summaryOfNotes.put(10, 0);
-    summaryOfNotes.put(20, 0);
-    summaryOfNotes.put(50, 0);
 
-    assertThat(atm.subtract(BigDecimal.valueOf(50D), summaryOfNotes)).isTrue();
-    BigDecimal withdrawOperation = atm.getOperations().get(0).getAmount();
-    assertThat(withdrawOperation).isEqualTo(BigDecimal.valueOf(50D));
+  @Test
+  void getOperations_shouldReturnEmptyOperations() {
+    assertThat(atm.getOperations()).isEmpty();
   }
 }
