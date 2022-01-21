@@ -1,40 +1,49 @@
 package com.zinkworks.assessment.controller.dto;
 
 import java.math.BigDecimal;
-import java.util.Comparator;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import com.zinkworks.assessment.model.ATMOperation;
 import com.zinkworks.assessment.model.Atm;
 
 public class ATMTransactionsResponse {
   private List<ATMOperation> statements;
-  private Map<Integer, Integer> notesAvailable;
-  private Date date;
+  private List<Notes> notesAvailable;
+  private LocalDateTime date = LocalDateTime.now();
   private BigDecimal balance;
   
   public ATMTransactionsResponse(Atm atm) {
     this.statements = atm.getOperations();
-    this.notesAvailable = atm.getNotesAvailable();
-    this.date = new Date();
     this.balance = atm.getBalance();
+  }
+  
+  public void setStatements(Map<Integer, Integer> statements) {
+    List<Notes> notesList = new ArrayList<>();
+    
+    statements.entrySet().forEach(note -> {
+      Integer currentFaceNote = note.getKey();
+      Integer currentQuantity = note.getValue();
+      notesList.add(new Notes(currentFaceNote, currentQuantity));
+    });
+    
+    this.notesAvailable = notesList;
+  }
+  
+  public List<Notes> getNotesAvailable() {
+    return notesAvailable;
   }
 
   public List<ATMOperation> getStatements() {
     return statements;
   }
 
-  public Map<Integer, Integer> getNotesAvailable() {
-    TreeMap<Integer, Integer> copy = new TreeMap<>(Comparator.reverseOrder());
-    copy.putAll(Map.copyOf(notesAvailable));
-    return copy;
-  }
-
-  public Date getDate() {
-    return date;
+  public String getDate() {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    return date.format(formatter);
   }
 
   public BigDecimal getBalance() {

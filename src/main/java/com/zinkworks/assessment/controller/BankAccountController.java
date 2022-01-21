@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zinkworks.assessment.controller.dto.BankAccountBalanceRequest;
@@ -31,28 +30,28 @@ public class BankAccountController {
   private WithdrawTransactionService withdrawService;
   
   @PostMapping("/details")
-  @ResponseBody
   public BankAccountResponse getAccount(@RequestBody BankAccountRequest request) {
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
-    return new BankAccountResponse(account);
+    BigDecimal totalFundsAvailable = bankAccountService.getTotalFundsAvailable(account);
+    return new BankAccountResponse(account, totalFundsAvailable);
   }
   
   @PostMapping("/balance")
-  @ResponseBody
   public BankAccountBalanceResponse balance(@RequestBody BankAccountBalanceRequest request) {
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
+    BigDecimal totalFundsAvailable = bankAccountService.getTotalFundsAvailable(account);
     return new BankAccountBalanceResponse(
-        account.getCurrentBalance(),
-        account.getTotalFundsAvailable());
+        account.getBalance(), 
+        totalFundsAvailable);
   }
   
   @PostMapping("/withdraw")
-  @ResponseBody
   public BankAccountWithdrawResponse withdraw(@RequestBody BankAccountWithdrawRequest request) {
-    Map<Integer,Integer> withdraw = withdrawService.withdraw(request.getAccountNumber(), request.getPin(), request.getAmount());
+    Long id = 1L;
+    Map<Integer,Integer> notesToBeDispensed = withdrawService.withdraw(request.getAccountNumber(), request.getPin(), request.getAmount(), id);
     BankAccount account = bankAccountService.getBankAccount(request.getAccountNumber(), request.getPin());
-    BigDecimal balance = account.getCurrentBalance();
-    
-    return new BankAccountWithdrawResponse(request.getAccountNumber(), withdraw, balance);
+    BankAccountWithdrawResponse accountWithdrawResponse = new BankAccountWithdrawResponse(account);
+    accountWithdrawResponse.setNotes(notesToBeDispensed);
+    return accountWithdrawResponse;
   }
 }

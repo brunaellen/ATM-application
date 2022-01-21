@@ -38,9 +38,13 @@ class BankAccountControllerTest {
   
   @Test
   void getAccount_givenBankAccountAndPin_shouldReturnAccountDetails() throws Exception {
+    BankAccount account = new BankAccount(1L, 1234, BigDecimal.valueOf(100), BigDecimal.valueOf(100));
     when(bankAccountService.getBankAccount(1L, 1234))
-    .thenReturn(new BankAccount(1L, 1234, BigDecimal.valueOf(100), BigDecimal.valueOf(100)));
+    .thenReturn(account);
   
+    when(bankAccountService.getTotalFundsAvailable(account))
+    .thenReturn(BigDecimal.valueOf(200));
+    
     final String balanceRequest = "{\n"
         + "    \"accountNumber\": 1,\n"
         + "    \"pin\": 1234\n"
@@ -54,16 +58,20 @@ class BankAccountControllerTest {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.balance").value(100))
-      .andExpect(jsonPath("$.availableToSpend").value(200))
+      .andExpect(jsonPath("$.overdraft").value(100))
+      .andExpect(jsonPath("$.totalFundsAvailable").value(200))
       .andExpect(jsonPath("$.accountNumber").value(1L))
       .andExpect(jsonPath("$.statements").isEmpty());
   }
 
   @Test
   void balance_givenBankAccountAndPin_shouldReturnAccountBalance() throws Exception {
-    
+    BankAccount account = new BankAccount(1L, 1234, BigDecimal.valueOf(100), BigDecimal.valueOf(100));
     when(bankAccountService.getBankAccount(1L, 1234))
-      .thenReturn(new BankAccount(1L, 1234, BigDecimal.valueOf(100), BigDecimal.valueOf(100)));
+      .thenReturn(account);
+    
+    when(bankAccountService.getTotalFundsAvailable(account))
+    .thenReturn(BigDecimal.valueOf(200));
     
     final String balanceRequest = "{\n"
         + "    \"accountNumber\": 1,\n"
@@ -124,7 +132,7 @@ class BankAccountControllerTest {
   @Test
   void withdraw_givenServiceProcessOperation_shouldReturn200() throws Exception {
     
-    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200)))
+    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200), 1L))
       .thenReturn(Map.of(50, 4, 20, 0, 10, 0, 5, 0));
     
     when(bankAccountService.getBankAccount(1L, 1234))
@@ -143,15 +151,13 @@ class BankAccountControllerTest {
           .accept(MediaType.APPLICATION_JSON))
       .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.notes.50").value(4))
-      .andExpect(jsonPath("$.accountNumber").value(1))
-      .andExpect(jsonPath("$.balance").value(200));
+      .andExpect(jsonPath("$.accountNumber").value(1));
   }
   
   @Test
   void withdraw_givenAccountHasNotEnoughMoney_shouldReturn400() throws Exception {
     
-    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200)))
+    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200), 1L))
       .thenThrow(InsufficientBankAccountFundsException.class);
     
     final String balanceRequest = "{\n"
@@ -173,7 +179,7 @@ class BankAccountControllerTest {
   @Test
   void withdraw_givenATMHasNotEnoughMoney_shouldReturn400() throws Exception {
     
-    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200)))
+    when(withdrawService.withdraw(1L, 1234, BigDecimal.valueOf(200), 1L))
       .thenThrow(InsufficientAtmFundsException.class);
     
     final String balanceRequest = "{\n"
