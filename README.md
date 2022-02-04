@@ -9,6 +9,7 @@ The application also allows the bank to check ATM transactions for banking purpo
 * Java 11
 * maven
 * Docker
+* H2 database
 
 ## How to build
 
