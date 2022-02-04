@@ -11,6 +11,7 @@ The application also allows the bank to check ATM transactions for banking purpo
 * Docker
 * H2 database
 * Spring data JPA
+* Front-end: Html, Css, Bootstrap, Vue.js, Axios.js
 
 ## How to build
 
