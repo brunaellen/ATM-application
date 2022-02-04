@@ -10,6 +10,7 @@ The application also allows the bank to check ATM transactions for banking purpo
 * maven
 * Docker
 * H2 database
+* Spring data JPA
 
 ## How to build
 
