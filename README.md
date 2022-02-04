@@ -158,3 +158,5 @@ Response:
     "balance": 1000.0
 }
 ```
+
+Project is in development <img src="https://img.icons8.com/emoji/48/000000/woman-construction-worker.png"/>
